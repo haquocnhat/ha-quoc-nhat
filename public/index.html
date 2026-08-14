@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hà Quốc Nhật</title>
+  <link rel="stylesheet" href="css_moi.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<nav class="main-nav">
+  <a href="#hero" class="nav-link brand">ĐỘ NHẠY</a>
+
+  <div class="nav-center">
+    <a href="#Trending" class="nav-link">Trending</a>
+    <a href="#tinmoi" class="nav-link">Tin mới</a>
+    <a href="#mangxahoi" class="nav-link">Mạng xã hội</a>
+    <a href="#khampha" class="nav-link">Khám phá</a>
+    <a href="#about" class="nav-link">About</a>
+  </div>
+</nav>
+
+<section class="hero" id="hero">
+  <canvas id="world"></canvas>
+
+  <div class="hero-text">
+    <h1>ĐỘ NHẠY</h1>
+    <p class="hero-subtitle">Nhạy bén từng ngày-Bắt kịp thế giới</p>
+    <p class="hero-founder">
+      Kênh được phát triển bởi Cử nhân Vật lý — ĐH Bách khoa Hà Nội -
+      <span>Hà Quốc Nhật</span>
+    </p>
+
+  </div>
+</section>
+
+<section id="Trending" class="trending-section">
+  <div class="section-heading">
+    <span class="section-label">TRENDING</span>
+    <h2>Đang được quan tâm</h2>
+    <p>Những chủ đề đáng chú ý ngay lúc này.</p>
+  </div>
+
+  <div class="trending-grid">
+    <article class="trend-card featured">
+      <div class="trend-image"><img src="sieuxe.jpg" alt="Chủ đề nổi bật"></div>
+      <div class="trend-content">
+        <span class="trend-tag">🔥 HOT</span>
+        <h3>Chủ đề nổi bật</h3>
+        <p>Một chủ đề đáng chú ý đang được quan tâm.</p>
+        <a href="#">Xem thêm →</a>
+      </div>
+    </article>
+
+    <article class="trend-card">
+      <div class="trend-image"><img src="canon.png" alt="Công nghệ"></div>
+      <div class="trend-content">
+        <span class="trend-tag">TECH</span>
+        <h3>Công nghệ</h3>
+        <p>Những tin tức công nghệ đáng chú ý.</p>
+        <a href="#">Xem thêm →</a>
+      </div>
+    </article>
+
+    <article class="trend-card">
+      <div class="trend-image"><img src="thcs.jpg" alt="Thế giới"></div>
+      <div class="trend-content">
+        <span class="trend-tag">WORLD</span>
+        <h3>Thế giới</h3>
+        <p>Những sự kiện đang được quan tâm.</p>
+        <a href="#">Xem thêm →</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<div class="live-bar">
+  <div class="live-status"><span class="live-dot"></span><strong>LIVE</strong></div>
+  <div class="live-message">Nội dung mới sẽ được cập nhật liên tục</div>
+  <div class="live-time">UPDATED JUST NOW</div>
+</div>
+
+<section id="tinmoi" class="news-section">
+  <div class="section-heading">
+    <span class="section-label">Tin mới</span>
+    <h2>Tin mới</h2>
+    <p>Cập nhật những thông tin mới nhất.</p>
+  </div>
+
+ <div class="news-list" id="newsList"></div>
+</section>
+
+<section id="mangxahoi" class="social-section">
+  <div class="section-heading">
+    <span class="section-label">Mạng xã hội</span>
+    <h2>Đang được bàn luận</h2>
+    <p>Những nội dung thú vị từ các nguồn mạng xã hội.</p>
+  </div>
+
+  <div class="social-grid">
+    <article class="social-card">
+      <div class="social-header">
+        <div class="social-avatar">FB</div>
+        <div class="social-info"><strong>Facebook Page</strong><span>2 giờ trước</span></div>
+      </div>
+      <div class="social-image"><img src="images/social-1.jpg" alt="Bài đăng mạng xã hội"></div>
+      <div class="social-content">
+        <p>Một nội dung thú vị đang được cộng đồng quan tâm. Đây sẽ là phần preview của bài đăng.</p>
+        <div class="social-footer"><span>👍 1.2K · 💬 234</span><a href="#">Xem nguồn →</a></div>
+      </div>
+    </article>
+
+    <article class="social-card">
+      <div class="social-header">
+        <div class="social-avatar">FB</div>
+        <div class="social-info"><strong>Một Page khác</strong><span>4 giờ trước</span></div>
+      </div>
+      <div class="social-image"><img src="images/social-2.jpg" alt="Bài đăng mạng xã hội"></div>
+      <div class="social-content">
+        <p>Một bài đăng khác đang nhận được nhiều sự chú ý trên mạng xã hội.</p>
+        <div class="social-footer"><span>👍 856 · 💬 97</span><a href="#">Xem nguồn →</a></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="khampha" class="discover-section">
+  <div class="discover-content">
+    <div class="discover-heading">
+      <span class="section-label">Khám phá</span>
+      <h2>Có gì đó thú vị ở đây.</h2>
+      <p>Âm nhạc, những điều kỳ lạ, những câu chuyện và những thứ mình tình cờ tìm thấy trên Internet.</p>
+    </div>
+
+    <div class="discover-grid">
+      <article class="discover-card">
+        <div class="discover-icon">🎵</div>
+        <span class="discover-card-label">MUSIC</span>
+        <h3>Nghe một chút</h3>
+        <p>Một vài bản cover và những đoạn guitar mình muốn chia sẻ.</p>
+        <a href="#">Nghe thử →</a>
+      </article>
+
+      <article class="discover-card">
+        <div class="discover-icon">🧠</div>
+        <span class="discover-card-label">RANDOM FACT</span>
+        <h3>Bạn có biết?</h3>
+        <p>Một thông tin ngẫu nhiên thú vị sẽ xuất hiện ở đây.</p>
+        <button class="discover-random">Khám phá →</button>
+      </article>
+
+      <article class="discover-card">
+        <div class="discover-icon">🎲</div>
+        <span class="discover-card-label">SURPRISE</span>
+        <h3>Thử vận may</h3>
+        <p>Bạn không biết mình sẽ nhận được gì cho đến khi bấm vào.</p>
+        <button class="discover-random">Mở ra →</button>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="about-section">
+  <div class="about-container">
+    <div class="about-heading">
+      <span class="section-label">About</span>
+      <h2>Một chút về mình.</h2>
+      <p>Đây là nơi mình chia sẻ một chút về bản thân, những gì mình đã học, những công việc đã trải qua và những điều mình quan tâm.</p>
+    </div>
+
+    <div class="about-grid">
+      <article class="about-card"><span class="about-number">01</span><h3>Học vấn</h3><p>Những kiến thức và nền tảng mình đã học trong quá trình phát triển bản thân.</p><a href="#">Xem thêm →</a></article>
+      <article class="about-card"><span class="about-number">02</span><h3>Công việc</h3><p>Những công việc, kinh nghiệm và những điều mình đã học được trong thực tế.</p><a href="#">Xem thêm →</a></article>
+      <article class="about-card"><span class="about-number">03</span><h3>Sở thích</h3><p>Âm nhạc, công nghệ, kỹ thuật và những thứ mình thích khám phá.</p><a href="#">Xem thêm →</a></article>
+    </div>
+  </div>
+</section>
+
+<footer><p>© 2026 HÀ QUỐC NHẬT</p></footer>
+
+
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
