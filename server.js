@@ -181,7 +181,7 @@ const rssSources = [
         source: "VnExpress"
     },
     {
-        url: "https://genk.vn/rss/di-dong.rss",
+        url: "https://genk.vn/rss/mobile.rss",
         category: "SMARTPHONE",
         source: "GenK"
     }
