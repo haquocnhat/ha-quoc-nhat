@@ -767,3 +767,37 @@ footer {
     );
 }
 
+/* ==============================
+   SOFT SECTION EDGES
+============================== */
+
+.trending-section,
+.news-section,
+.social-section,
+.discover-section,
+.about-section {
+    position: relative;
+    z-index: 1;
+}
+
+/* Làm mềm mép dưới */
+
+.trending-section::after,
+.news-section::after,
+.social-section::after,
+.discover-section::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 35px;
+
+    pointer-events: none;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0),
+        rgba(255,255,255,.8)
+    );
+}
