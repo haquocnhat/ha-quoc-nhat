@@ -22,27 +22,41 @@ const pool = new Pool({
 app.use(express.static("public"));
 
 // ==============================
-// API LẤY TIN
+// API TIN MỚI — GENK
 // ==============================
 
 app.get("/api/news", async (req, res) => {
+
     try {
-        const result = await pool.query(
-            "SELECT * FROM news ORDER BY published_at DESC LIMIT 20"
-        );
+
+        const result = await pool.query(`
+            SELECT *
+            FROM news
+            WHERE source = 'GenK'
+              AND category = 'SMARTPHONE'
+            ORDER BY published_at DESC
+            LIMIT 20
+        `);
 
         res.json(result.rows);
 
     } catch (error) {
+
         console.error(error);
 
         res.status(500).json({
-            error: "Không thể lấy dữ liệu từ database"
+            error: "Không thể lấy dữ liệu tin tức"
         });
     }
 });
 
+
+// ==============================
+// API TRENDING — DÂN TRÍ
+// ==============================
+
 app.get("/api/trending", async (req, res) => {
+
     try {
 
         const result = await pool.query(`
@@ -66,23 +80,94 @@ app.get("/api/trending", async (req, res) => {
     }
 });
 
+
 // ==============================
-// HÀM LẤY RSS CHUNG
+// TỪ KHÓA SMARTPHONE
+// ==============================
+
+const smartphoneKeywords = [
+
+    "iphone",
+    "ios",
+
+    "samsung",
+    "galaxy",
+
+    "xiaomi",
+    "redmi",
+
+    "oppo",
+
+    "vivo",
+
+    "huawei",
+
+    "honor",
+
+    "pixel",
+
+    "oneplus",
+
+    "realme",
+
+    "motorola",
+
+    "nokia",
+
+    "asus rog phone",
+
+    "smartphone",
+
+    "điện thoại",
+
+    "điện thoại thông minh",
+
+    "android",
+
+    "snapdragon",
+
+    "mediatek",
+
+    "dimensity"
+
+];
+
+
+// ==============================
+// KIỂM TRA CÓ PHẢI SMARTPHONE
+// ==============================
+
+function isSmartphone(title, description) {
+
+    const text =
+        `${title} ${description}`.toLowerCase();
+
+    return smartphoneKeywords.some(keyword =>
+        text.includes(keyword)
+    );
+}
+
+
+// ==============================
+// HÀM LẤY RSS
 // ==============================
 
 async function fetchRSS(url, category, source) {
 
     try {
 
-        const feed = await parser.parseURL(url);
+        const feed =
+            await parser.parseURL(url);
 
         console.log(
             `Đang cập nhật: ${source} - ${category} (${feed.items.length} bài)`
         );
 
-        for (const item of feed.items.slice(0, 20)) {
 
-            const title = item.title || "";
+        for (const item of feed.items.slice(0, 30)) {
+
+            const title =
+                item.title || "";
 
             const description =
                 item.contentSnippet ||
@@ -90,36 +175,99 @@ async function fetchRSS(url, category, source) {
                 item.description ||
                 "";
 
-            const sourceUrl = item.link || "";
+            const sourceUrl =
+                item.link || "";
 
-            let imageUrl =
-    item.enclosure?.url ||
-    item["media:content"]?.url ||
-    item["media:thumbnail"]?.url ||
-    null;
-
-if (!imageUrl) {
-
-    const html =
-        item.content ||
-        item.description ||
-        "";
-
-    const match =
-        html.match(/<img[^>]+src=["']([^"']+)["']/i);
-
-    if (match) {
-        imageUrl = match[1];
-    }
-}
-
-            const publishedAt = item.pubDate
-                ? new Date(item.pubDate)
-                : new Date();
 
             if (!sourceUrl) {
                 continue;
             }
+
+
+            // ==============================
+            // LỌC SMARTPHONE CHO DÂN TRÍ
+            // ==============================
+
+            if (
+                source === "Dân trí" &&
+                !isSmartphone(title, description)
+            ) {
+
+                console.log(
+                    `Bỏ qua: ${title}`
+                );
+
+                continue;
+            }
+
+
+            // ==============================
+            // TÌM ẢNH
+            // ==============================
+
+            let imageUrl =
+
+                item.enclosure?.url ||
+                item["media:content"]?.url ||
+                item["media:thumbnail"]?.url ||
+                item.image?.url ||
+                null;
+
+
+            // media:group
+
+            if (
+                !imageUrl &&
+                item["media:group"]
+            ) {
+
+                const group =
+                    item["media:group"];
+
+                imageUrl =
+                    group["media:content"]?.url ||
+                    group["media:thumbnail"]?.url ||
+                    null;
+            }
+
+
+            // ==============================
+            // TÌM ẢNH TRONG HTML
+            // ==============================
+
+            if (!imageUrl) {
+
+                const html =
+                    item.content ||
+                    item.description ||
+                    "";
+
+                const match =
+                    html.match(
+                        /<img[^>]+(?:src|data-src)=["']([^"']+)["']/i
+                    );
+
+                if (match) {
+
+                    imageUrl =
+                        match[1];
+                }
+            }
+
+
+            // ==============================
+            // THỜI GIAN
+            // ==============================
+
+            const publishedAt =
+                item.pubDate
+                    ? new Date(item.pubDate)
+                    : new Date();
+
+
+            // ==============================
+            // LƯU DATABASE
+            // ==============================
 
             await pool.query(
                 `
@@ -134,16 +282,27 @@ if (!imageUrl) {
                     published_at
                 )
 
-                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                VALUES
+                ($1, $2, $3, $4, $5, $6, $7)
 
                 ON CONFLICT (source_url)
+
                 DO UPDATE SET
 
-                    title = EXCLUDED.title,
-                    description = EXCLUDED.description,
-                    image_url = EXCLUDED.image_url,
-                    category = EXCLUDED.category,
-                    published_at = EXCLUDED.published_at
+                    title =
+                        EXCLUDED.title,
+
+                    description =
+                        EXCLUDED.description,
+
+                    image_url =
+                        EXCLUDED.image_url,
+
+                    category =
+                        EXCLUDED.category,
+
+                    published_at =
+                        EXCLUDED.published_at
                 `,
                 [
                     title,
@@ -155,7 +314,9 @@ if (!imageUrl) {
                     publishedAt
                 ]
             );
+
         }
+
 
         console.log(
             `✓ ${source}: ${category} đã cập nhật`
@@ -169,64 +330,93 @@ if (!imageUrl) {
         );
     }
 }
+
+
 // ==============================
-// DANH SÁCH RSS VNEXPRESS
+// RSS SOURCES
 // ==============================
 
 const rssSources = [
 
+    // TRENDING
     {
-        url: "https://dantri.com.vn/rss/suc-manh-so.rss",
-        category: "TRENDING",
-        source: "Dân trí"
+        url:
+            "https://dantri.com.vn/rss/cong-nghe.rss",
+
+        category:
+            "TRENDING",
+
+        source:
+            "Dân trí"
     },
 
+
+    // TIN MỚI
     {
-        url: "https://genk.vn/rss/mobile.rss",
-        category: "SMARTPHONE",
-        source: "GenK"
+        url:
+            "https://genk.vn/rss/mobile.rss",
+
+        category:
+            "SMARTPHONE",
+
+        source:
+            "GenK"
     }
 
 ];
 
+
 // ==============================
-// CẬP NHẬT TẤT CẢ RSS
+// CẬP NHẬT
 // ==============================
 
 async function updateAllNews() {
 
     console.log("");
-    console.log("========== CẬP NHẬT TIN ==========");
+    console.log(
+        "========== CẬP NHẬT TIN =========="
+    );
+
 
     for (const source of rssSources) {
 
         await fetchRSS(
-    source.url,
-    source.category,
-    source.source
-);
+            source.url,
+            source.category,
+            source.source
+        );
     }
 
-    console.log("========== HOÀN TẤT ==========");
+
+    console.log(
+        "========== HOÀN TẤT =========="
+    );
+
     console.log("");
 }
 
+
 // ==============================
-// KHỞI ĐỘNG SERVER
+// SERVER
 // ==============================
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
 
-    console.log(
-        `Website đang chạy tại http://localhost:${PORT}`
-    );
+        console.log(
+            `Website đang chạy tại http://localhost:${PORT}`
+        );
 
-    // Cập nhật ngay khi server khởi động
-    updateAllNews();
 
-    // Cập nhật mỗi 15 phút
-    setInterval(
-        updateAllNews,
-        15 * 60 * 1000
-    );
-});
+        updateAllNews();
+
+
+        setInterval(
+            updateAllNews,
+            15 * 60 * 1000
+        );
+
+    }
+);
