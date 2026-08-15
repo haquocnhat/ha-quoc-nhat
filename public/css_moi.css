@@ -187,9 +187,9 @@ button {
   
 }
 .hero-text h1 {
-    font-family: "Manrope", sans-serif;
+    font-family: "Fredoka", sans-serif;
     font-size: clamp(4.5rem, 11vw, 10rem);
-    font-weight: 300;
+    font-weight: 400;
     letter-spacing: 0.08em;
     line-height: 0.9;
     margin: 0;
