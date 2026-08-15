@@ -42,6 +42,31 @@ app.get("/api/news", async (req, res) => {
     }
 });
 
+app.get("/api/trending", async (req, res) => {
+    try {
+        const result = await pool.query(`
+            SELECT *
+            FROM news
+            WHERE source = 'GenK'
+              AND (
+                  LOWER(category) LIKE '%smartphone%'
+                  OR LOWER(category) LIKE '%dien thoai%'
+              )
+            ORDER BY published_at DESC
+            LIMIT 3
+        `);
+
+        res.json(result.rows);
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: "Không thể lấy dữ liệu trending"
+        });
+    }
+});
+
 // ==============================
 // HÀM LẤY RSS CHUNG
 // ==============================
@@ -137,14 +162,16 @@ async function fetchRSS(url, category) {
 // ==============================
 
 const rssSources = [
-
-  
-
     {
         url: "https://vnexpress.net/rss/so-hoa.rss",
-        category: "CÔNG NGHỆ"
+        category: "CÔNG NGHỆ",
+        source: "VnExpress"
+    },
+    {
+        url: "https://genk.vn/rss/dien-thoai.rss",
+        category: "SMARTPHONE",
+        source: "GenK"
     }
-
 ];
 
 // ==============================

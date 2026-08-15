@@ -587,3 +587,80 @@ async function loadNews() {
 }
 
 loadNews();
+
+async function loadTrending() {
+    try {
+        const response = await fetch("/api/trending");
+
+        if (!response.ok) {
+            throw new Error("Không thể lấy dữ liệu trending");
+        }
+
+        const trending = await response.json();
+
+        const trendingGrid =
+            document.getElementById("trendingGrid");
+
+        if (!trendingGrid) return;
+
+        trendingGrid.innerHTML = trending.map((item, index) => {
+
+            return `
+                <article class="trend-card ${index === 0 ? "featured" : ""}">
+
+                    <div class="trend-image">
+
+                        ${
+                            item.image_url
+                                ? `<img
+                                    src="${item.image_url}"
+                                    alt="${item.title}"
+                                   >`
+                                : `<div class="news-placeholder">
+                                    <span>ĐỘ NHẠY</span>
+                                   </div>`
+                        }
+
+                    </div>
+
+                    <div class="trend-content">
+
+                        <span class="trend-tag">
+                            ${index === 0 ? "🔥 HOT" : "SMARTPHONE"}
+                        </span>
+
+                        <h3>${item.title}</h3>
+
+                        <p>
+                            ${item.description || ""}
+                        </p>
+
+                        ${
+                            item.source_url
+                                ? `<a
+                                    href="${item.source_url}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                   >
+                                    Xem bài gốc →
+                                   </a>`
+                                : ""
+                        }
+
+                    </div>
+
+                </article>
+            `;
+
+        }).join("");
+
+    } catch (error) {
+
+        console.error(
+            "Lỗi tải trending:",
+            error
+        );
+    }
+}
+
+loadTrending();
