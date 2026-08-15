@@ -71,7 +71,7 @@ app.get("/api/trending", async (req, res) => {
 // HÀM LẤY RSS CHUNG
 // ==============================
 
-async function fetchRSS(url, category) {
+async function fetchRSS(url, category, source) {
 
     try {
 
@@ -132,15 +132,15 @@ async function fetchRSS(url, category) {
                     category = EXCLUDED.category,
                     published_at = EXCLUDED.published_at
                 `,
-                [
-                    title,
-                    description,
-                    "VnExpress",
-                    sourceUrl,
-                    imageUrl,
-                    category,
-                    publishedAt
-                ]
+              [
+    title,
+    description,
+    source,
+    sourceUrl,
+    imageUrl,
+    category,
+    publishedAt
+]
             );
         }
 
@@ -186,9 +186,10 @@ async function updateAllNews() {
     for (const source of rssSources) {
 
         await fetchRSS(
-            source.url,
-            source.category
-        );
+    source.url,
+    source.category,
+    source.source
+);
     }
 
     console.log("========== HOÀN TẤT ==========");
