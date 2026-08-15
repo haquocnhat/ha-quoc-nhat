@@ -204,14 +204,89 @@ async function fetchRSS(url, category, source) {
             // ==============================
             // TÌM ẢNH
             // ==============================
+// ==============================
+// TÌM ẢNH
+// ==============================
 
-            let imageUrl =
+let imageUrl =
+    item.enclosure?.url ||
+    item["media:content"]?.url ||
+    item["media:thumbnail"]?.url ||
+    item.image?.url ||
+    null;
 
-                item.enclosure?.url ||
-                item["media:content"]?.url ||
-                item["media:thumbnail"]?.url ||
-                item.image?.url ||
-                null;
+
+// ==============================
+// MEDIA GROUP
+// ==============================
+
+if (
+    !imageUrl &&
+    item["media:group"]
+) {
+
+    const group =
+        item["media:group"];
+
+    imageUrl =
+        group["media:content"]?.url ||
+        group["media:thumbnail"]?.url ||
+        null;
+}
+
+
+// ==============================
+// TÌM ẢNH TRONG HTML
+// ==============================
+
+if (!imageUrl) {
+
+    const html =
+        item.content ||
+        item["content:encoded"] ||
+        item.description ||
+        "";
+
+    const matches =
+        html.match(
+            /<img[^>]+(?:src|data-src|data-original|data-lazy-src)=["']([^"']+)["']/gi
+        );
+
+    if (matches && matches.length > 0) {
+
+        const firstImage =
+            matches[0].match(
+                /(?:src|data-src|data-original|data-lazy-src)=["']([^"']+)["']/i
+            );
+
+        if (firstImage) {
+            imageUrl = firstImage[1];
+        }
+    }
+}
+
+
+// ==============================
+// LÀM SẠCH URL ẢNH
+// ==============================
+
+if (imageUrl) {
+
+    imageUrl =
+        imageUrl
+            .replace(/&amp;/g, "&")
+            .trim();
+
+}
+
+
+// ==============================
+// DEBUG
+// ==============================
+
+console.log(
+    `Ảnh: ${imageUrl || "KHÔNG CÓ"}`
+);
 
 
             // media:group
