@@ -399,181 +399,191 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 async function loadNews() {
-
     try {
-
-        const response =
-            await fetch("/api/news");
-
+        const response = await fetch("/api/news");
 
         if (!response.ok) {
-
-            throw new Error(
-                "Không thể lấy dữ liệu tin tức"
-            );
-
+            throw new Error("Không thể lấy dữ liệu tin tức");
         }
 
+        const allNews = await response.json();
 
-        const news =
-            await response.json();
-
-
-        const newsList =
-            document.getElementById(
-                "newsList"
-            );
-
+        const newsList = document.getElementById("newsList");
 
         if (!newsList) return;
 
+        const smartphoneKeywords = [
+            "smartphone",
+            "điện thoại",
+            "mobile phone",
+            "mobile",
+            "iphone",
+            "ipad",
+            "samsung galaxy",
+            "galaxy",
+            "xiaomi",
+            "oppo",
+            "vivo",
+            "honor",
+            "huawei",
+            "google pixel",
+            "pixel phone",
+            "oneplus",
+            "realme",
+            "nothing phone",
+            "motorola",
+            "sony xperia",
+            "nokia phone",
+            "snapdragon",
+            "dimensity",
+            "android",
+            "ios",
+            "one ui",
+            "hyperos",
+            "coloros",
+            "funtouch os",
+            "magicos"
+        ];
 
-        newsList.innerHTML =
-            news.map(item => {
+        const smartphoneCategories = [
+            "smartphone",
+            "mobile",
+            "mobile phone",
+            "điện thoại",
+            "phone"
+        ];
 
+        const normalize = text =>
+            String(text || "")
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
 
-            const time =
-                item.published_at
+        const isSmartphoneNews = item => {
 
-                ? new Date(
-                    item.published_at
-                  ).toLocaleTimeString(
+            const category = normalize(item.category);
+
+            const title = normalize(item.title);
+
+            const description = normalize(item.description);
+
+            // Category xác định rõ là smartphone
+            if (
+                smartphoneCategories.some(keyword =>
+                    category.includes(normalize(keyword))
+                )
+            ) {
+                return true;
+            }
+
+            // Tiêu đề có từ khóa smartphone
+            if (
+                smartphoneKeywords.some(keyword =>
+                    title.includes(normalize(keyword))
+                )
+            ) {
+                return true;
+            }
+
+            // Nội dung mô tả chỉ được dùng như điều kiện bổ sung
+            const keywordInDescription =
+                smartphoneKeywords.some(keyword =>
+                    description.includes(normalize(keyword))
+                );
+
+            // Nếu mô tả có smartphone và category thuộc nhóm công nghệ
+            const techCategories = [
+                "tech",
+                "technology",
+                "cong nghe",
+                "congnghe",
+                "technology news"
+            ];
+
+            if (
+                keywordInDescription &&
+                techCategories.some(keyword =>
+                    category.includes(normalize(keyword))
+                )
+            ) {
+                return true;
+            }
+
+            return false;
+        };
+
+        const news = allNews.filter(isSmartphoneNews);
+
+        newsList.innerHTML = news.map(item => {
+
+            const time = item.published_at
+                ? new Date(item.published_at).toLocaleTimeString(
                     "vi-VN",
                     {
                         hour: "2-digit",
                         minute: "2-digit"
                     }
-                  )
-
+                )
                 : "";
 
-
             return `
-
                 <article class="news-card">
 
-
-                    <div
-                        class="news-image
-                        ${item.image_url ? "" : "no-image"}"
-                    >
+                    <div class="news-image ${item.image_url ? "" : "no-image"}">
 
                         ${
                             item.image_url
-
-                            ? `<img
-                                src="${item.image_url}"
-                                alt="${item.title}"
-                               >`
-
-
-                            : `<div
-                                class="news-placeholder"
-                               >
-
-                                <span>
-                                    ĐỘ NHẠY
-                                </span>
-
-                               </div>`
+                                ? `<img
+                                    src="${item.image_url}"
+                                    alt="${item.title}"
+                                   >`
+                                : `<div class="news-placeholder">
+                                    <span>ĐỘ NHẠY</span>
+                                   </div>`
                         }
 
                     </div>
 
-
                     <div class="news-content">
 
-
                         <div class="news-meta">
-
-                            ${time}
-                            ·
-                            ${item.category || "NEWS"}
-
+                            ${time} · ${item.category || "SMARTPHONE"}
                         </div>
 
+                        <h3>${item.title}</h3>
 
-                        <h3>
-                            ${item.title}
-                        </h3>
-
-
-                        <p>
-                            ${item.description || ""}
-                        </p>
-
+                        <p>${item.description || ""}</p>
 
                         <div class="news-footer">
-
 
                             <span>
                                 ${item.source || ""}
                             </span>
 
-
                             ${
                                 item.source_url
-
-                                ? `<a
-                                    href="${item.source_url}"
-                                    target="_blank"
-                                   >
-                                    Đọc bài gốc →
-                                   </a>`
-
-                                : ""
+                                    ? `<a
+                                        href="${item.source_url}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                       >
+                                        Đọc bài gốc →
+                                       </a>`
+                                    : ""
                             }
-
 
                         </div>
 
                     </div>
 
                 </article>
-
             `;
 
         }).join("");
 
-
     } catch (error) {
-
-        console.error(
-            "Lỗi tải tin:",
-            error
-        );
-
+        console.error("Lỗi tải tin:", error);
     }
-
 }
 
-
 loadNews();
-
-
-
-
-/*
-============================================================
-📌 TÓM TẮT
-============================================================
-
-
-🟩 PHẦN 3:
-    Canvas #world
-    → 800 particles
-    → tương tác chuột
-    → animation nền
-
-🟨 PHẦN 4:
-    Navigation active khi scroll
-
-
-
-🟥 PHẦN 7:
-    loadNews() trùng — bản có ảnh + thời gian
-
-
-
-============================================================
-*/
