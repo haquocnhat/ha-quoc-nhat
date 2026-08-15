@@ -175,16 +175,19 @@ if (!imageUrl) {
 // ==============================
 
 const rssSources = [
+
     {
-        url: "https://vnexpress.net/rss/so-hoa.rss",
-        category: "CÔNG NGHỆ",
-        source: "VnExpress"
+        url: "https://dantri.com.vn/rss/suc-manh-so.rss",
+        category: "TRENDING",
+        source: "Dân trí"
     },
+
     {
         url: "https://genk.vn/rss/mobile.rss",
         category: "SMARTPHONE",
         source: "GenK"
     }
+
 ];
 
 // ==============================
