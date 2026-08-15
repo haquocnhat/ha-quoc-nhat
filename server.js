@@ -78,7 +78,7 @@ async function fetchRSS(url, category, source) {
         const feed = await parser.parseURL(url);
 
         console.log(
-            `Đang cập nhật: ${category} (${feed.items.length} bài)`
+            `Đang cập nhật: ${source} - ${category} (${feed.items.length} bài)`
         );
 
         for (const item of feed.items.slice(0, 20)) {
@@ -103,7 +103,6 @@ async function fetchRSS(url, category, source) {
                 ? new Date(item.pubDate)
                 : new Date();
 
-            // Không có link thì bỏ qua
             if (!sourceUrl) {
                 continue;
             }
@@ -132,31 +131,30 @@ async function fetchRSS(url, category, source) {
                     category = EXCLUDED.category,
                     published_at = EXCLUDED.published_at
                 `,
-              [
-    title,
-    description,
-    source,
-    sourceUrl,
-    imageUrl,
-    category,
-    publishedAt
-]
+                [
+                    title,
+                    description,
+                    source,
+                    sourceUrl,
+                    imageUrl,
+                    category,
+                    publishedAt
+                ]
             );
         }
 
         console.log(
-            `✓ ${category}: đã cập nhật`
+            `✓ ${source}: ${category} đã cập nhật`
         );
 
     } catch (error) {
 
         console.error(
-            `✗ Lỗi RSS ${category}:`,
+            `✗ Lỗi RSS ${source} ${category}:`,
             error.message
         );
     }
 }
-
 // ==============================
 // DANH SÁCH RSS VNEXPRESS
 // ==============================
