@@ -1,5 +1,3 @@
-
-
 /*
 ============================================================
 🟩 PHẦN 3 — CANVAS #WORLD
@@ -66,7 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 alpha: Math.random() * 0.5 + 0.2
 
             });
-
         }
     }
 
@@ -105,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /*
     --------------------------------------------------------
-    🟩 3.5 — TỰ ĐỘNG RESIZE KHI ĐỔI KÍCH THƯỚC CỬA SỔ
+    🟩 3.5 — RESIZE
     --------------------------------------------------------
     */
 
@@ -114,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /*
     --------------------------------------------------------
-    🟩 3.6 — VÒNG LẶP ANIMATION CỦA CANVAS
+    🟩 3.6 — ANIMATION
     --------------------------------------------------------
     */
 
@@ -129,7 +126,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         particles.forEach(p => {
-
 
             /*
             ------------------------------------------------
@@ -198,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             /*
             ------------------------------------------------
-            🟩 CẬP NHẬT VỊ TRÍ PARTICLE
+            🟩 CẬP NHẬT VỊ TRÍ
             ------------------------------------------------
             */
 
@@ -285,12 +281,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
 
-        /*
-        ------------------------------------------------
-        🟩 CHẠY FRAME TIẾP THEO
-        ------------------------------------------------
-        */
-
         requestAnimationFrame(animate);
 
     }
@@ -320,12 +310,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll("section[id]");
 
 
-    /*
-    --------------------------------------------------------
-    🟨 4.1 — XÁC ĐỊNH SECTION ĐANG XEM
-    --------------------------------------------------------
-    */
-
     function updateActiveNav() {
 
         let current = "hero";
@@ -345,12 +329,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
 
-        /*
-        ----------------------------------------------------
-        🟨 4.2 — ĐỔI TRẠNG THÁI MENU
-        ----------------------------------------------------
-        */
-
         navLinks.forEach(link => {
 
             link.classList.toggle(
@@ -367,12 +345,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /*
-    --------------------------------------------------------
-    🟨 4.3 — CẬP NHẬT MENU KHI SCROLL
-    --------------------------------------------------------
-    */
-
     window.addEventListener(
         "scroll",
         updateActiveNav
@@ -386,281 +358,569 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /*
 ============================================================
-🟥 PHẦN 7 — LOAD NEWS LẦN 3
-⭐ BẢN NÀY CÓ:
-   - ẢNH
-   - THỜI GIAN
-   - CATEGORY
-   - PLACEHOLDER "ĐỘ NHẠY"
-   - LINK BÀI GỐC
+🟥 PHẦN 7 — LOAD NEWS
+⭐ CHỈ LẤY SMARTPHONE
 ============================================================
 */
 
-
-
 async function loadNews() {
+
     try {
-        const response = await fetch("/api/news");
+
+        const response =
+            await fetch("/api/news");
+
 
         if (!response.ok) {
-            throw new Error("Không thể lấy dữ liệu tin tức");
+
+            throw new Error(
+                "Không thể lấy dữ liệu tin tức"
+            );
+
         }
 
-        const allNews = await response.json();
 
-        const newsList = document.getElementById("newsList");
+        const allNews =
+            await response.json();
+
+
+        const newsList =
+            document.getElementById(
+                "newsList"
+            );
+
 
         if (!newsList) return;
 
+
+        /*
+        ----------------------------------------------------
+        🟩 TỪ KHÓA SMARTPHONE
+        ----------------------------------------------------
+        */
+
         const smartphoneKeywords = [
+
             "smartphone",
+
             "điện thoại",
+
             "mobile phone",
+
             "mobile",
+
             "iphone",
+
             "ipad",
+
             "samsung galaxy",
+
             "galaxy",
+
             "xiaomi",
+
             "oppo",
+
             "vivo",
+
             "honor",
+
             "huawei",
+
             "google pixel",
+
             "pixel phone",
+
             "oneplus",
+
             "realme",
+
             "nothing phone",
+
             "motorola",
+
             "sony xperia",
+
             "nokia phone",
+
             "snapdragon",
+
             "dimensity",
+
             "android",
+
             "ios",
+
             "one ui",
+
             "hyperos",
+
             "coloros",
+
             "funtouch os",
+
             "magicos"
+
         ];
+
 
         const smartphoneCategories = [
+
             "smartphone",
+
             "mobile",
+
             "mobile phone",
+
             "điện thoại",
+
             "phone"
+
         ];
 
+
         const normalize = text =>
+
             String(text || "")
+
                 .toLowerCase()
+
                 .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "");
+
+                .replace(
+                    /[\u0300-\u036f]/g,
+                    ""
+                );
+
+
+        /*
+        ----------------------------------------------------
+        🟩 KIỂM TRA SMARTPHONE
+        ----------------------------------------------------
+        */
 
         const isSmartphoneNews = item => {
 
-            const category = normalize(item.category);
+            const category =
+                normalize(item.category);
 
-            const title = normalize(item.title);
+            const title =
+                normalize(item.title);
 
-            const description = normalize(item.description);
+            const description =
+                normalize(item.description);
 
-            // Category xác định rõ là smartphone
+
+            /*
+            Category xác định smartphone
+            */
+
             if (
-                smartphoneCategories.some(keyword =>
-                    category.includes(normalize(keyword))
+
+                smartphoneCategories.some(
+                    keyword =>
+                        category.includes(
+                            normalize(keyword)
+                        )
                 )
+
             ) {
+
                 return true;
+
             }
 
-            // Tiêu đề có từ khóa smartphone
+
+            /*
+            Tiêu đề có từ khóa smartphone
+            */
+
             if (
-                smartphoneKeywords.some(keyword =>
-                    title.includes(normalize(keyword))
+
+                smartphoneKeywords.some(
+                    keyword =>
+                        title.includes(
+                            normalize(keyword)
+                        )
                 )
+
             ) {
+
                 return true;
+
             }
 
-            // Nội dung mô tả chỉ được dùng như điều kiện bổ sung
+
+            /*
+            Mô tả chỉ là điều kiện bổ sung
+            */
+
             const keywordInDescription =
-                smartphoneKeywords.some(keyword =>
-                    description.includes(normalize(keyword))
+
+                smartphoneKeywords.some(
+                    keyword =>
+                        description.includes(
+                            normalize(keyword)
+                        )
                 );
 
-            // Nếu mô tả có smartphone và category thuộc nhóm công nghệ
+
             const techCategories = [
+
                 "tech",
+
                 "technology",
+
                 "cong nghe",
+
                 "congnghe",
+
                 "technology news"
+
             ];
 
+
             if (
+
                 keywordInDescription &&
-                techCategories.some(keyword =>
-                    category.includes(normalize(keyword))
+
+                techCategories.some(
+                    keyword =>
+                        category.includes(
+                            normalize(keyword)
+                        )
                 )
+
             ) {
+
                 return true;
+
             }
 
+
             return false;
+
         };
 
-        const news = allNews.filter(isSmartphoneNews);
 
-        newsList.innerHTML = news.map(item => {
+        /*
+        ----------------------------------------------------
+        🟩 LỌC TIN
+        ----------------------------------------------------
+        */
 
-            const time = item.published_at
-                ? new Date(item.published_at).toLocaleTimeString(
-                    "vi-VN",
-                    {
-                        hour: "2-digit",
-                        minute: "2-digit"
-                    }
-                )
-                : "";
+        const news =
+            allNews.filter(
+                isSmartphoneNews
+            );
 
-            return `
-                <article class="news-card">
 
-                    <div class="news-image ${item.image_url ? "" : "no-image"}">
+        /*
+        ----------------------------------------------------
+        🟩 RENDER TIN
+        ----------------------------------------------------
+        */
 
-                        ${
-                            item.image_url
+        newsList.innerHTML =
+
+            news.map(item => {
+
+                const time =
+                    item.published_at
+
+                    ? new Date(
+                        item.published_at
+                      ).toLocaleTimeString(
+                        "vi-VN",
+                        {
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        }
+                      )
+
+                    : "";
+
+
+                return `
+
+                    <article
+                        class="news-card"
+                    >
+
+                        <div
+                            class="news-image
+                            ${
+                                item.image_url
+                                    ? ""
+                                    : "no-image"
+                            }"
+                        >
+
+                            ${
+                                item.image_url
+
                                 ? `<img
                                     src="${item.image_url}"
                                     alt="${item.title}"
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer"
+                                    onerror="
+                                        this.style.display='none';
+                                    "
                                    >`
-                                : `<div class="news-placeholder">
-                                    <span>ĐỘ NHẠY</span>
+
+                                : `<div
+                                    class="news-placeholder"
+                                   >
+
+                                    <span>
+                                        ĐỘ NHẠY
+                                    </span>
+
                                    </div>`
-                        }
+                            }
 
-                    </div>
-
-                    <div class="news-content">
-
-                        <div class="news-meta">
-                            ${time} · ${item.category || "SMARTPHONE"}
                         </div>
 
-                        <h3>${item.title}</h3>
 
-                        <p>${item.description || ""}</p>
+                        <div
+                            class="news-content"
+                        >
 
-                        <div class="news-footer">
+                            <div
+                                class="news-meta"
+                            >
 
-                            <span>
-                                ${item.source || ""}
-                            </span>
+                                ${time}
+                                ·
+                                ${item.category || "SMARTPHONE"}
 
-                            ${
-                                item.source_url
+                            </div>
+
+
+                            <h3>
+                                ${item.title}
+                            </h3>
+
+
+                            <p>
+                                ${item.description || ""}
+                            </p>
+
+
+                            <div
+                                class="news-footer"
+                            >
+
+                                <span>
+                                    ${item.source || ""}
+                                </span>
+
+
+                                ${
+                                    item.source_url
+
                                     ? `<a
                                         href="${item.source_url}"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                        >
+
                                         Đọc bài gốc →
+
                                        </a>`
+
                                     : ""
-                            }
+                                }
+
+                            </div>
 
                         </div>
 
-                    </div>
+                    </article>
 
-                </article>
-            `;
+                `;
 
-        }).join("");
+            }).join("");
 
-    } catch (error) {
-        console.error("Lỗi tải tin:", error);
     }
+
+
+    catch (error) {
+
+        console.error(
+            "Lỗi tải tin:",
+            error
+        );
+
+    }
+
 }
+
 
 loadNews();
 
+
+/*
+============================================================
+🔥 PHẦN TRENDING
+⭐ NGUỒN: DÂN TRÍ
+⭐ CHỈ SMARTPHONE
+============================================================
+*/
+
 async function loadTrending() {
+
     try {
-        const response = await fetch("/api/trending");
+
+        const response =
+            await fetch(
+                "/api/trending"
+            );
+
 
         if (!response.ok) {
-            throw new Error("Không thể lấy dữ liệu trending");
+
+            throw new Error(
+                "Không thể lấy dữ liệu trending"
+            );
+
         }
 
-        const trending = await response.json();
+
+        const trending =
+            await response.json();
+
 
         const trendingGrid =
-            document.getElementById("trendingGrid");
+            document.getElementById(
+                "trendingGrid"
+            );
+
 
         if (!trendingGrid) return;
 
-        trendingGrid.innerHTML = trending.map((item, index) => {
 
-            return `
-                <article class="trend-card ${index === 0 ? "featured" : ""}">
+        /*
+        ----------------------------------------------------
+        🟧 RENDER TRENDING
+        ----------------------------------------------------
+        */
 
-                    <div class="trend-image">
+        trendingGrid.innerHTML =
 
-                        ${
-                            item.image_url
-                                ? `<img
-                                    src="${item.image_url}"
-                                    alt="${item.title}"
-                                   >`
-                                : `<div class="news-placeholder">
-                                    <span>ĐỘ NHẠY</span>
-                                   </div>`
-                        }
+            trending.map(
+                (item, index) => {
 
-                    </div>
+                    return `
 
-                    <div class="trend-content">
+                        <article
+                            class="
+                                trend-card
+                                ${
+                                    index === 0
+                                        ? "featured"
+                                        : ""
+                                }
+                            "
+                        >
 
-                        <span class="trend-tag">
-                            ${index === 0 ? "🔥 HOT" : "SMARTPHONE"}
-                        </span>
+                            <div
+                                class="trend-image"
+                            >
 
-                        <h3>${item.title}</h3>
+                                ${
+                                    item.image_url
 
-                        <p>
-                            ${item.description || ""}
-                        </p>
+                                    ? `<img
+                                        src="${item.image_url}"
+                                        alt="${item.title}"
+                                        loading="lazy"
+                                        referrerpolicy="no-referrer"
+                                        onerror="
+                                            this.style.display='none';
+                                        "
+                                       >`
 
-                        ${
-                            item.source_url
-                                ? `<a
-                                    href="${item.source_url}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                   >
-                                    Xem bài gốc →
-                                   </a>`
-                                : ""
-                        }
+                                    : `<div
+                                        class="news-placeholder"
+                                       >
 
-                    </div>
+                                        <span>
+                                            ĐỘ NHẠY
+                                        </span>
 
-                </article>
-            `;
+                                       </div>`
+                                }
 
-        }).join("");
+                            </div>
 
-    } catch (error) {
+
+                            <div
+                                class="trend-content"
+                            >
+
+                                <span
+                                    class="trend-tag"
+                                >
+
+                                    ${
+                                        index === 0
+                                            ? "🔥 HOT"
+                                            : "SMARTPHONE"
+                                    }
+
+                                </span>
+
+
+                                <h3>
+                                    ${item.title}
+                                </h3>
+
+
+                                <p>
+                                    ${item.description || ""}
+                                </p>
+
+
+                                ${
+                                    item.source_url
+
+                                    ? `<a
+                                        href="${item.source_url}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                       >
+
+                                        Xem bài gốc →
+
+                                       </a>`
+
+                                    : ""
+                                }
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }
+            ).join("");
+
+
+    }
+
+    catch (error) {
 
         console.error(
             "Lỗi tải trending:",
             error
         );
+
     }
+
 }
+
 
 loadTrending();
