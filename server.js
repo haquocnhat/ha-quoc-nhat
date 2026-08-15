@@ -44,14 +44,12 @@ app.get("/api/news", async (req, res) => {
 
 app.get("/api/trending", async (req, res) => {
     try {
+
         const result = await pool.query(`
             SELECT *
             FROM news
-            WHERE source = 'GenK'
-              AND (
-                  LOWER(category) LIKE '%smartphone%'
-                  OR LOWER(category) LIKE '%dien thoai%'
-              )
+            WHERE source = 'Dân trí'
+              AND category = 'TRENDING'
             ORDER BY published_at DESC
             LIMIT 3
         `);
@@ -59,6 +57,7 @@ app.get("/api/trending", async (req, res) => {
         res.json(result.rows);
 
     } catch (error) {
+
         console.error(error);
 
         res.status(500).json({
