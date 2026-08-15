@@ -93,11 +93,26 @@ async function fetchRSS(url, category, source) {
 
             const sourceUrl = item.link || "";
 
-            const imageUrl =
-                item.enclosure?.url ||
-                item["media:content"]?.url ||
-                item["media:thumbnail"]?.url ||
-                null;
+            let imageUrl =
+    item.enclosure?.url ||
+    item["media:content"]?.url ||
+    item["media:thumbnail"]?.url ||
+    null;
+
+if (!imageUrl) {
+
+    const html =
+        item.content ||
+        item.description ||
+        "";
+
+    const match =
+        html.match(/<img[^>]+src=["']([^"']+)["']/i);
+
+    if (match) {
+        imageUrl = match[1];
+    }
+}
 
             const publishedAt = item.pubDate
                 ? new Date(item.pubDate)
