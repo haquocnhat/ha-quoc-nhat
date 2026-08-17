@@ -801,3 +801,21 @@ footer {
         rgba(255,255,255,.8)
     );
 }
+
+.nav-link,
+.brand-tab,
+.hero-button,
+button {
+    outline: none;
+    caret-color: transparent;
+}
+
+.nav-link:focus,
+.nav-link:focus-visible,
+.brand-tab:focus,
+.brand-tab:focus-visible,
+.hero-button:focus,
+.hero-button:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
